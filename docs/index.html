@@ -1,14 +1,39 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>alian-uiのテスト</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>テトリス</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #333;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        .tetris {
+            display: grid;
+            grid-template-columns: repeat(10, 30px);
+            grid-template-rows: repeat(20, 30px);
+            gap: 1px;
+            border: 2px solid #fff;
+        }
+        .block {
+            width: 30px;
+            height: 30px;
+            background-color: #444;
+        }
+    </style>
 </head>
 <body>
-  <h1>alian-uiのテストです</h1>
-  <footer>
-    <div>Elliyah Park</div>
-  </footer>
+    <div class="tetris">
+        <!-- ブロックを配置するための要素 -->
+        <div class="block"></div>
+        <!-- これを20行×10列分繰り返す -->
+    </div>
+    <script src="tetris.js"></script>
 </body>
 </html>
