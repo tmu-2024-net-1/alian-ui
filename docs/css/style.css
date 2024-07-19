@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #000033;
+    cursor: url(../umbrella_cursor.png), auto;
+}
+.raindrop {
+    position: absolute;
+    color: #6699CC;
+    font-size: 24px;
+    user-select: none;
+}
