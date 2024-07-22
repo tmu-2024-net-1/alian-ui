@@ -2,7 +2,7 @@ body {
     margin: 0;
     overflow: hidden;
     background-color: #b7d1d1;
-    cursor: url('../umbrella_cursor.png'), auto;
+    cursor: url('../image/umbrella_cursor.png'), auto;
 }
 
 .raindrop {
