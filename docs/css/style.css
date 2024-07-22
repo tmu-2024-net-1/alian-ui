@@ -2,11 +2,13 @@ body {
     margin: 0;
     overflow: hidden;
     background-color: #b7d1d1;
-    cursor: url(../umbrella_cursor.png), auto;
+    cursor: url('../umbrella_cursor.png'), auto;
 }
+
 .raindrop {
     position: absolute;
     color: #6699CC;
-    font-size: 24px;
+    font-size: 14px;
     user-select: none;
+    pointer-events: none; /* これにより、雨の文字がカーソルの動作に影響しないようにする */
 }
