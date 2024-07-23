@@ -8,19 +8,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: rgba(217, 228, 238, 0.781);
 }
 canvas {
-    background-color: rgba(217, 228, 238, 0.781);
+    background-color: rgba(190, 218, 210, 0.781);
 }
-
-/*#fading-text {
-    font-family: serif;
-    font-size: 160px;
-    opacity: 1;
-    transition: opacity 2s ease-in-out;
-    text-align: center;
-    padding-top: 0px;
-    margin: 290px;
-    stroke: black;
-  }*/
