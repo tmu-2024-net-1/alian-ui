@@ -6,10 +6,22 @@
     <title>雨に消える</title>
     <link rel="stylesheet" href="css/disappear.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/hamburger.css">
 </head>
 <body>
     <canvas id="noiseCanvas"></canvas>
+    <div class="hamburger" id="hamburger">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+    <div class="overlay" id="overlay">
+        <p>
+            雨に打たれて文章がゆっくりと消えていくアニメーションサイトを作りました。文章の内容は”雨”、”消える”をテーマに作成しました。文章の文字は雨粒の通った箇所が滲むようにゆっくりと消えていきます。降ってくる雨は、文字通り漢字の雨が降ってくる仕様になっており、マウスカーソルの傘に当たると、雨水が避けていく仕様になっています。
+        </p>
+    </div>
     <script src="javascript/disappear.js"></script>  
     <script src="javascript/script.js"></script> 
+    <script src="javascript/hamburger.js"></script>
 </body>
 </html>

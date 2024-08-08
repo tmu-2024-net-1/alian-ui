@@ -1,0 +1,69 @@
+/* css/hamburger.css */
+.hamburger {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.hamburger .bar {
+    height: 3px;
+    width: 100%;
+    background-color: black;
+    margin: 4px 0;
+    transition: 0.4s;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0); /* 初期状態は透明 */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 900;
+    overflow: auto;
+    transition: background-color 0.4s ease; /* 背景色のフェードイン */
+}
+
+.overlay p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+    opacity: 0; /* 初期状態は透明 */
+    transition: opacity 0.4s ease; /* 文字のフェードイン */
+    padding: 300px;
+}
+
+.overlay.active {
+    display: flex;
+}
+
+.overlay.show {
+    background-color: rgba(255, 255, 255, 0.5); /* 背景色の透明度を0.5に */
+}
+
+.overlay p.show {
+    opacity: 1; /* 文字の透明度を1に */
+}
+
+.hamburger.active .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 5px);
+}
+
+.hamburger.active .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -5px);
+}

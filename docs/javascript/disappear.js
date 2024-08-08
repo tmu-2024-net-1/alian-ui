@@ -45,105 +45,81 @@ lines.forEach((line, index) => {
 const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 const originalPixels = new Uint32Array(imageData.data.buffer);
 
-function applyNoiseToChar(lineIndex, charIndex) {
-    const startY = 20 + (lineIndex * lineHeight);
-    const endY = startY + lineHeight;
-    const charWidth = ctx.measureText(lines[lineIndex][charIndex]).width;
-    const startX = 20 + ctx.measureText(lines[lineIndex].substring(0, charIndex)).width;
-    const endX = startX + charWidth;
+const raindrops = [];
+const mouseRadius = 30;
+let mouseX = 0;
+let mouseY = 0;
 
-    let allTransparent = true;
+function createRaindrop() {
+    const raindrop = document.createElement('div');
+        raindrop.className = 'raindrop';
+        raindrop.textContent = '雨';
+        raindrop.style.left = Math.random() * window.innerWidth + 'px';
+        raindrop.style.top = '-30px';
+        raindrop.style.fontFamily = 'serif';
+    document.body.appendChild(raindrop);
 
-    for (let y = startY; y < endY; y++) {
-        for (let x = startX; x < endX; x++) {
-            const i = y * canvas.width + x;
-            if (originalPixels[i] !== 0) {
-                const alphaIndex = i * 4 + 3;
-                if (imageData.data[alphaIndex] > 0) {
-                    if (Math.random() < 0.07) { // 40%の確率で透明化
-                        imageData.data[alphaIndex] = 0;
-                    } else {
-                        allTransparent = false;
-                    }
-                }
-            }
-        }
-    }
+    const speed = 5.5 + Math.random() * 3;
+    const x = parseFloat(raindrop.style.left);
+    let y = -30;
 
-    return allTransparent;
+    raindrops.push({ element: raindrop, x, y, speed });
 }
 
-function selectRandomChar(lineIndex) {
-    const line = lines[lineIndex];
-    const visibleChars = [];
-    
-    for (let i = 0; i < line.length; i++) {
-        const startX = 20 + ctx.measureText(line.substring(0, i)).width;
-        const charWidth = ctx.measureText(line[i]).width;
-        const startY = 20 + (lineIndex * lineHeight);
-        
-        let isVisible = false;
-        for (let y = startY; y < startY + lineHeight; y++) {
-            for (let x = startX; x < startX + charWidth; x++) {
-                const pixelIndex = (y * canvas.width + x) * 4 + 3;
-                if (imageData.data[pixelIndex] > 0) {
-                    isVisible = true;
-                    break;
+function updateRaindrops() {
+    for (let i = raindrops.length - 1; i >= 0; i--) {
+        const raindrop = raindrops[i];
+        raindrop.y += raindrop.speed;
+
+        const dx = raindrop.x - mouseX;
+        const dy = raindrop.y - mouseY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < mouseRadius) {
+            const angle = Math.atan2(dy, dx);
+            raindrop.x = mouseX + Math.cos(angle) * mouseRadius;
+            raindrop.y = mouseY + Math.sin(angle) * mouseRadius;
+        }
+
+        raindrop.element.style.top = raindrop.y + 'px';
+        raindrop.element.style.left = raindrop.x + 'px';
+
+        if (raindrop.y > window.innerHeight) {
+            document.body.removeChild(raindrop.element);
+            raindrops.splice(i, 1);
+        }
+
+        // 雨粒がキャンバス内の文字を通過するかチェックして不透明度を減少させる
+        reduceOpacityOnRainDrop(raindrop);
+    }
+}
+
+function reduceOpacityOnRainDrop(raindrop) {
+    const raindropX = Math.floor(raindrop.x);
+    const raindropY = Math.floor(raindrop.y);
+
+    for (let y = raindropY - 5; y <= raindropY + 5; y++) {
+        for (let x = raindropX - 5; x <= raindropX + 5; x++) {
+            if (x >= 0 && x < canvas.width && y >= 0 && y < canvas.height) {
+                const index = (y * canvas.width + x) * 4 + 3; // alphaチャンネルのインデックス
+                if (imageData.data[index] > 0) {
+                    imageData.data[index] = Math.max(imageData.data[index] - 25.5, 0); // 不透明度を10%減少
                 }
             }
-            if (isVisible) break;
-        }
-        
-        if (isVisible) {
-            visibleChars.push(i);
         }
     }
-    
-    return visibleChars.length > 0 ? visibleChars[Math.floor(Math.random() * visibleChars.length)] : -1;
+    ctx.putImageData(imageData, 0, 0);
 }
 
 function animate() {
-    const selectedChars = [];
-
-    function selectChars() {
-        selectedChars.length = 0;
-        for (let lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-            const selectedChar = selectRandomChar(lineIndex);
-            if (selectedChar !== -1) {
-                selectedChars.push({ lineIndex, charIndex: selectedChar });
-            }
-        }
-    }
-
-    function frame() {
-        if (selectedChars.length === 0) {
-            selectChars();
-        }
-
-        if (selectedChars.length === 0) {
-            return; // アニメーション終了
-        }
-
-        let allComplete = true;
-        for (let i = 0; i < selectedChars.length; i++) {
-            const { lineIndex, charIndex } = selectedChars[i];
-            const allTransparent = applyNoiseToChar(lineIndex, charIndex);
-            if (!allTransparent) {
-                allComplete = false;
-            }
-        }
-
-        ctx.putImageData(imageData, 0, 0);
-
-        if (allComplete) {
-            selectChars();
-        }
-
-        requestAnimationFrame(frame);
-    }
-
-    frame();
+    if (Math.random() < 0.2) createRaindrop();
+    updateRaindrops();
+    requestAnimationFrame(animate);
 }
 
-// アニメーションを開始
-setTimeout(animate, 1000);
+document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+});
+
+animate();
